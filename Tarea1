@@ -1,0 +1,313 @@
+import re
+import math
+
+#Método que nos muestra el menú
+def mostrar_menu():
+    print("\t1. Convertir de binario a decimal")
+    print("\t2. Convertir de decimal a binario")
+    print("\t3. Convertir de binario a hexadecimal")
+    print("\t4. Convertir de hexadecimal a binario")
+    print("\t5. Convertir de decimal a octal")
+    print("\t6. Convertir de octal a decimal")
+    print("\t7. Convertir de decimal a hexadecimal")
+    print("\t8. Convertir de hexadecimal a decimal")
+    print("\t9. Convertir de binario a octal")
+    print("\t10. Convertir de octal a binario")
+    print("\t11. Convertir de binario a hexadecimal")
+    print("\t12. Convertir de hexadecimal a binario")
+    print("\t13. Convertir de octal a hexadecimal")
+    print("\t14. Convertir de hexadecimal a octal")
+    print("\t15. Salir")
+
+#Métodos que nos hacen las conversioe
+def binario_a_decimal(binario):
+   
+    if '.' in binario:
+        entero, decimal = binario.split('.')
+    else:
+        entero = binario
+        decimal = '0'
+    
+    partEntera = 0
+    for i in range(len(entero)):
+        partEntera += int(entero[-(i+1)]) * (2 ** i)
+
+    partDecimal = 0
+    for i in range(len(decimal)):
+        partDecimal += int(decimal[i]) * (2 ** -(i+1))
+
+    return partEntera + partDecimal
+
+
+def decimal_a_binario(entero,decimal):
+    parteEntera = ("{0:b}".format(int(entero,10)))
+    parteDecimal = ("{0:b}".format(int(decimal,10)))
+    print('El número en binario es:',parteEntera+'.'+parteDecimal)
+    
+    return 0
+
+
+def binario_a_hexadecimal(entero,decimal):
+    parteEntera = ("{0:0>X}".format(int(entero, 2)))
+    parteDecimal = ("{0:0>X}".format(int(decimal, 2)))
+    print('El número en hexadecimal es: ',parteEntera+'.'+parteDecimal)
+    
+    return 0
+
+
+def hexadecimal_a_binario(entero,decimal):
+    parteEntera = ("{0:b}".format(int(entero,16)))
+    parteDecimal = ("{0:b}".format(int(decimal,16)))
+    print('El número en hexadecimal es:',parteEntera+'.'+parteDecimal)
+    
+    return 0
+
+
+def decimal_a_octal(entero,decimal):
+    parteEntera = ("{0:o}".format(int(entero,10)))
+    parteDecimal = ("{0:o}".format(int(decimal,10)))
+    print('El número en octal es:',parteEntera+'.'+parteDecimal)
+    return 0
+
+def octal_a_decimal(octal):
+    if '.' in octal:
+        entero, decimal = octal.split('.')
+    else:
+        entero = octal
+        decimal = '0'
+
+    partEntera = 0
+    for i in range(len(entero)):
+        partEntera += int(entero[-(i+1)]) * (8 ** i)
+
+    partDecimal = 0
+    for i in range(len(decimal)):
+        partDecimal += int(decimal[i]) * (8 ** -(i+1))
+   
+    partDecimal = round(partDecimal, 2)
+
+    return partEntera + partDecimal
+
+def decimal_a_hexadecimal(decimal):
+    pEnteros = int(decimal)
+    parteFrac = decimal - pEnteros
+    
+    hexEnt = hex(pEnteros)[2:].upper()
+    
+    hexFrac = ""
+    while parteFrac != 0:
+        parteFrac *= 16
+        num = int(parteFrac)
+        if num < 10:
+            hexFrac += str(num)
+        else:
+            hexFrac += chr(ord('A') + num - 10)
+        parteFrac -= int(parteFrac)
+    
+    if hexFrac:
+        return hexEnt + "." + hexFrac
+    else:
+        return hexEnt
+
+def hexadecimal_a_decimal(hexadecimal):
+    decimal = int(hexadecimal, 16)
+    return decimal
+
+
+def binario_a_octal(entero,decimal):
+    parteEntera = ("{0:o}".format(int(entero,2)))
+    parteDecimal = ("{0:o}".format(int(decimal,2)))
+    print('El número en octal es:',parteEntera+'.'+parteDecimal)
+    
+    return 0
+
+
+def octal_a_binario(entero,decimal):
+    parteEntera = ("{0:b}".format(int(entero,8)))
+    parteDecimal = ("{0:b}".format(int(decimal,8)))
+    print('El número en binario es:',parteEntera+'.'+parteDecimal)
+    
+    return 0
+   
+
+def octal_a_hexadecimal(octal):
+    decimal = int(octal, 8)
+    hexadecimal = hex(decimal).lstrip("0x").rstrip("L")
+    return hexadecimal
+
+
+def hexadecimal_a_octal(hexadecimal):
+    decimal = int(hexadecimal, 16)
+    octal = oct(decimal).lstrip("0o").rstrip("L")
+    return octal
+
+#Métodos que verifican si el número ingresado coincide con la base solicitada
+
+def verifica_binario(binario):
+    patron = re.compile('[^01]')
+    if '.' in binario:
+        entero, decimal = binario.split('.')
+        if patron.search(entero) or patron.search(decimal):
+            x = input('Ingresa un número válido: ')
+            return verifica_binario(x)
+        else:
+            return entero, decimal
+    else:
+        entero = binario
+        decimal = '0'
+        if patron.search(entero):
+            x = input('Ingresa un número válido: ')
+            return verifica_binario(x)
+        else:
+            return entero, decimal
+            
+def verifica_hexadecimal(hexadecimal):
+    patron = re.compile('[^0-9A-Fa-f]')
+    if '.' in hexadecimal:
+        entero, decimal = hexadecimal.split('.')
+        if patron.search(entero) or patron.search(decimal):
+            x = input('Ingresa un número válido: ')
+            return verifica_hexadecimal(x)
+        else:
+            return entero, decimal
+    else:
+        entero =hexadecimal
+        decimal = '0'
+        if patron.search(entero):
+            x = input('Ingresa un número válido: ')
+            return hexadecimal(x)
+        else:
+            return entero, decimal
+            
+def verifica_octal(octal):
+    patron = re.compile('[^0-7]')
+    if '.' in octal:
+        entero, decimal = octal.split('.')
+        if patron.search(entero) or patron.search(decimal):
+            x = input('Ingresa un número válido: ')
+            return verifica_octall(x)
+        else:
+            return entero, decimal
+    else:
+        entero =octal
+        decimal = '0'
+        if patron.search(entero):
+            x = input('Ingresa un número válido: ')
+            return octal(x)
+        else:
+            return entero, decimal
+
+def verifica_decimal(decimal):
+    
+    if '.' in decimal:
+        entero, fraccion = decimal.split('.')
+        if entero.isdigit() and fraccion.isdigit():
+            return entero, fraccion
+        else:
+            x = input('Ingresa un número válido: ')
+            return verifica_decimal(x)
+    else:
+        if decimal.isdigit():
+            fraccion =  '0'
+            return decimal, fraccion
+        else:
+            x = input('Ingresa un número válido: ')
+            return verifica_decimal(x)
+
+            
+def main():
+    while True:
+        mostrar_menu()
+        print("\n")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            binario = input("Ingrese el número binario: ")
+            entero,decimal = verifica_binario(binario)
+            resultado= entero+'.'+decimal
+            print(resultado)
+            resultado = binario_a_decimal(binario)
+            print("El resultado es:", resultado)
+            print("\n")
+        elif opcion == "2":
+            decimal = input('Ingresa un número decimal: ')
+            entero, fraccion = verifica_decimal(decimal)
+            decimal_a_binario(entero,fraccion)
+        elif opcion == "3":
+            binario = input('Ingresa un número binario: ')
+            entero, decimal = verifica_binario(binario)
+            binario_a_hexadecimal(entero,decimal)
+    
+        elif opcion == "4":
+            hexadecimal = input('Ingresa un número Hexadecimal: ')
+            entero, decimal = verifica_hexadecimal(hexadecimal)
+            hexadecimal_a_binario(entero,decimal)
+        elif opcion == "5":
+            decimal = input('Ingresa un número decimal: ')
+            entero, fraccion = verifica_decimal(decimal)
+            decimal_a_octal(entero,fraccion)
+            print("\n")
+        elif opcion == "6":
+            octal = input("Ingrese el número octal: ")
+            resultado = octal_a_decimal(octal)
+            print("El resultado es:", resultado)
+            print("\n")
+        elif opcion == "7":
+            decimal = float(int(input("Ingrese el número decimal: ")))
+            resultado = decimal_a_hexadecimal(decimal)
+            print("El resultado en hexadecimal es:", resultado)
+            print("\n")
+        elif opcion == "8":
+            hexadecimal = input("Ingrese el número hexadecimal: ")
+            resultado = hexadecimal_a_decimal(hexadecimal)
+            print("El resultado en decimal es:", resultado)
+            print("\n")
+        elif opcion == "9":
+            binario = input('Ingresa un número binario: ')
+            entero, decimal = verifica_binario(binario)
+            binario_a_octal(entero,decimal)
+            print("\n")
+        elif opcion == "10":
+            octal = input('Ingresa un número octal: ')
+            entero, decimal = verifica_octal(octal)
+            octal_a_binario(entero,decimal)
+            print("\n")
+        elif opcion == "11":
+            binario = input('Ingresa un número binario: ')
+            entero, decimal = verifica_binario(binario)
+            binario_a_hexadecimal(entero,decimal)
+            print("\n")
+        elif opcion == "12":
+            hexadecimal = input('Ingresa un número Hexadecimal: ')
+            entero, decimal = verifica_hexadecimal(hexadecimal)
+            hexadecimal_a_binario(entero,decimal)
+            print("\n")
+        elif opcion == "13":
+            octal = input("Ingrese el número octal: ")
+            resultado = octal_a_hexadecimal(octal)
+            print("El resultado es:", resultado)
+            print("\n")
+        elif opcion == "14":
+            hexadecimal = input("Ingrese el número hexadecimal: ")
+            resultado = hexadecimal_a_octal(hexadecimal)
+            print("El resultado es:", resultado)
+            print("\n")
+        elif opcion == "15":
+            print("¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida. Por favor, seleccione una opción válida.")
+
+name = 'main'
+if name == "main":
+    print("""
+    ###      ###                                                                    ##                                 ####
+     ##       ##                                                                                                      ##  ##
+     ##       ##   ##  ##                               ####     ######  ##  ##    ###     ######    ####                 ##
+  #####    #####   #######           ######            ##  ##   ##  ##   ##  ##     ##      ##  ##  ##  ##              ###
+ ##  ##   ##  ##   ## # ##                             ######   ##  ##   ##  ##     ##      ##  ##  ##  ##                ##
+ ##  ##   ##  ##   ##   ##                             ##        #####   ##  ##     ##      #####   ##  ##            ##  ##
+  ######   ######  ##   ##                              #####       ##    ######   ####     ##       ####              ####
+                                                                   ####                    ####
+    """)
+    main()
